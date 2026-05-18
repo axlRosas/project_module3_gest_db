@@ -11,20 +11,20 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import declarative_base, sessionmaker, relationship
 import subprocess
+import os
 
 # ------------------------------------------------------------
 # i) CONFIGURACIÓN DEL ORM
 # ------------------------------------------------------------
-# Reemplaza los valores de conexión con los de tu entorno local
-DB_USER     = "postgres"
-DB_PASSWORD = "admin"
-DB_HOST = subprocess.check_output(
+DB_USER = os.getenv("DB_USER", "postgres")
+DB_PASSWORD = os.getenv("DB_PASSWORD", "admin")
+DB_HOST = os.getenv("DB_HOST", subprocess.check_output(
     "ip route | awk '/default/ {print $3}'",
     shell=True,
     text=True
-).strip()
-DB_PORT     = "5432"
-DB_NAME     = "ecommerce_db"
+).strip())
+DB_PORT = os.getenv("DB_PORT", "5432")
+DB_NAME = os.getenv("DB_NAME", "ecommerce_db")
 
 DATABASE_URL = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
